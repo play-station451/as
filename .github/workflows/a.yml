@@ -13,6 +13,7 @@ jobs:
         curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && sudo cloudflared service install eyJhIjoiMWE1MTc4MTE0YTZjOWZmNDllMzZiNmMxNzVlOTZiYjkiLCJ0IjoiMWE4MTU1MDctZTBkZi00MGQxLWIyNTctN2ZmN2VjMjBmMzFmIiwicyI6Ill6QmtPVFpsTlRRdE4yRTROQzAwWmpBeExXSmlPRFF0TmpBeU5XSmhNekpsWW1FeSJ9
 
     - name: a
+      run: |
         git clone https://github.com/Emanhyb/dextert && \
         cd dextert && \
         npm install && \
