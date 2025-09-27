@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const { exec } = require('child_process');
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
@@ -8,8 +9,21 @@ function createWindow () {
     frame: false,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true, // Enable nodeIntegration for ipcRenderer
+      contextIsolation: false // Disable contextIsolation for ipcRenderer
     }
+  });
+
+  ipcMain.on('launch-exe', (event, exePath) => {
+    exec(`"${exePath}"`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.error(`stderr: ${stderr}`);
+    });
   });
 
   mainWindow.loadFile('index.html');

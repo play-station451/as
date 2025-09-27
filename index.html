@@ -23,5 +23,84 @@
         <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
         <p class="text-gray-600">This is the main content area. You can add your application's content here.</p>
     </main>
+    <script>
+        const addAppButton = document.querySelector('aside button');
+        const mainContent = document.querySelector('main');
+        const sidebarNav = document.querySelector('aside .flex-1.p-4'); // This will be the container for app links
+
+        let apps = JSON.parse(localStorage.getItem('apps')) || [];
+
+        function renderApps() {
+            // Clear existing app links
+            sidebarNav.innerHTML = `
+                <button id="add-app-sidebar-button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                    Add App
+                </button>
+            `;
+            apps.forEach(app => {
+                const appLink = document.createElement('a');
+                appLink.href = "#";
+                appLink.className = "block py-2 px-4 rounded hover:bg-gray-700 mt-2";
+                appLink.textContent = app.name;
+                appLink.dataset.path = app.path;
+                appLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    displayStartButton(app.name, app.path);
+                });
+                sidebarNav.appendChild(appLink);
+            });
+            document.getElementById('add-app-sidebar-button').addEventListener('click', handleAddAppClick);
+        }
+
+        function handleAddAppClick() {
+            mainContent.innerHTML = `
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Add New Application</h1>
+                <button id="add-exe-button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    Add EXE
+                </button>
+            `;
+            document.getElementById('add-exe-button').addEventListener('click', handleAddExeClick);
+        }
+
+        function handleAddExeClick() {
+            const appName = prompt("Enter application name:");
+            if (appName) {
+                const appPath = prompt(`Enter path for ${appName} (e.g., C:\\Program Files\\App\\app.exe):`);
+                if (appPath) {
+                    apps.push({ name: appName, path: appPath });
+                    localStorage.setItem('apps', JSON.stringify(apps));
+                    renderApps();
+                    mainContent.innerHTML = `
+                        <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
+                        <p class="text-gray-600">Application "${appName}" added successfully!</p>
+                    `;
+                }
+            }
+        }
+
+        function displayStartButton(appName, appPath) {
+            mainContent.innerHTML = `
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">${appName}</h1>
+                <button id="start-exe-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Start ${appName}
+                </button>
+            `;
+            document.getElementById('start-exe-button').addEventListener('click', () => {
+                // This will be handled by Electron's IPC in main.js
+                console.log(`Attempting to start ${appPath}`);
+                window.electron.ipcRenderer.send('launch-exe', appPath);
+            });
+        }
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderApps();
+            // Set initial main content
+            mainContent.innerHTML = `
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
+                <p class="text-gray-600">Select an app from the sidebar or click "Add App" to get started.</p>
+            `;
+        });
+    </script>
 </body>
 </html>
