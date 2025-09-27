@@ -55,26 +55,37 @@
         function handleAddAppClick() {
             mainContent.innerHTML = `
                 <h1 class="text-3xl font-bold text-gray-800 mb-6">Add New Application</h1>
-                <button id="add-exe-button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                    Add EXE
-                </button>
+                <div class="space-y-4">
+                    <div>
+                        <label for="appName" class="block text-sm font-medium text-gray-700">Application Name</label>
+                        <input type="text" id="appName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="e.g., My Game">
+                    </div>
+                    <div>
+                        <label for="appPath" class="block text-sm font-medium text-gray-700">Executable Path</label>
+                        <input type="text" id="appPath" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="e.g., C:\\Program Files\\MyGame\\game.exe">
+                    </div>
+                    <button id="submit-add-app" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                        Add Application
+                    </button>
+                </div>
             `;
-            document.getElementById('add-exe-button').addEventListener('click', handleAddExeClick);
+            document.getElementById('submit-add-app').addEventListener('click', handleSubmitAddApp);
         }
 
-        function handleAddExeClick() {
-            const appName = prompt("Enter application name:");
-            if (appName) {
-                const appPath = prompt(`Enter path for ${appName} (e.g., C:\\Program Files\\App\\app.exe):`);
-                if (appPath) {
-                    apps.push({ name: appName, path: appPath });
-                    localStorage.setItem('apps', JSON.stringify(apps));
-                    renderApps();
-                    mainContent.innerHTML = `
-                        <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
-                        <p class="text-gray-600">Application "${appName}" added successfully!</p>
-                    `;
-                }
+        function handleSubmitAddApp() {
+            const appName = document.getElementById('appName').value;
+            const appPath = document.getElementById('appPath').value;
+
+            if (appName && appPath) {
+                apps.push({ name: appName, path: appPath });
+                localStorage.setItem('apps', JSON.stringify(apps));
+                renderApps();
+                mainContent.innerHTML = `
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
+                    <p class="text-gray-600">Application "${appName}" added successfully!</p>
+                `;
+            } else {
+                alert("Please enter both application name and executable path.");
             }
         }
 
