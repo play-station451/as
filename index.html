@@ -99,7 +99,12 @@
             document.getElementById('start-exe-button').addEventListener('click', () => {
                 // This will be handled by Electron's IPC in main.js
                 console.log(`Attempting to start ${appPath}`);
-                window.electron.ipcRenderer.send('launch-exe', appPath);
+                if (window.electron && window.electron.ipcRenderer) {
+                    console.log('window.electron.ipcRenderer is available.');
+                    window.electron.ipcRenderer.send('launch-exe', appPath);
+                } else {
+                    console.error('window.electron or window.electron.ipcRenderer is undefined.');
+                }
             });
         }
 

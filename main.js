@@ -10,8 +10,8 @@ function createWindow () {
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true, // Enable nodeIntegration for ipcRenderer
-      contextIsolation: false // Disable contextIsolation for ipcRenderer
+      nodeIntegration: false, // Disable nodeIntegration for security
+      contextIsolation: true // Enable contextIsolation and use preload script
     }
   });
 

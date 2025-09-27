@@ -1,5 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+console.log('preload.js is running'); // Added for debugging
+
 contextBridge.exposeInMainWorld(
   'electron',
   {
