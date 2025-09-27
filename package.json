@@ -14,7 +14,7 @@
   "build": {
     "appId": "com.example.myelectronapp",
     "win": {
-      "target": "nsis"
+      "target": "portable"
     }
   }
 }
