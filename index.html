@@ -87,8 +87,8 @@
     <div class="buttons-container">
         <button id="xylaraButton">Xylara</button>
         <button id="stelliteButton">Stellite</button>
-        <button id="terbiumButton">Terbium</button>
-        <button id="anuraButton">Anura</button>
+        <button id="terbiumButton">TerbiumOS</button>
+        <button id="XenButton">XenOS</button>
         <button id="clearDataButton">Clear Site Data</button>
     </div>
     <iframe id="contentFrame" src=""></iframe>
@@ -111,11 +111,10 @@
             document.getElementById('contentFrame').src = currentProxy;
         });
 
-        document.getElementById('anuraButton').addEventListener('click', function() {
-            currentProxy = 'https://redshifting.space/';
+        document.getElementById('terbiumButton').addEventListener('click', function() {
+            currentProxy = 'https://grim-kiele-7b7t-1213c2d2.koyeb.app/';
             document.getElementById('contentFrame').src = currentProxy;
         });
-
         document.getElementById('clearDataButton').addEventListener('click', function() {
             if (confirm('Are you sure you want to clear all site data for the current proxy? This will log you out of sites.')) {
                 window.electron.ipcRenderer.send('clear-site-data', currentProxy);
