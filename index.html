@@ -3,119 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidebar Layout</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Proxy Selector</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .buttons-container {
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        iframe {
+            width: 100%;
+            height: calc(100vh - 70px); /* Adjust height based on button container height */
+            border: none;
+        }
+    </style>
 </head>
-<body class="flex h-screen bg-gray-100">
-    <aside class="w-64 bg-gray-800 text-white flex flex-col">
-        <div class="p-4 text-2xl font-bold border-b border-gray-700">
-            App Name
-        </div>
-        <div class="flex-1 p-4">
-            <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
-                Add App
-            </button>
-        </div>
-    </aside>
+<body>
+    <div class="buttons-container">
+        <button id="xylaraButton">Xylara</button>
+        <button id="stelliteButton">Stellite</button>
+    </div>
+    <iframe id="contentFrame" src=""></iframe>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
-        <p class="text-gray-600">This is the main content area. You can add your application's content here.</p>
-    </main>
     <script>
-        const addAppButton = document.querySelector('aside button');
-        const mainContent = document.querySelector('main');
-        const sidebarNav = document.querySelector('aside .flex-1.p-4'); // This will be the container for app links
+        document.getElementById('xylaraButton').addEventListener('click', function() {
+            document.getElementById('contentFrame').src = 'https://proxy-h3md.onrender.com/';
+        });
 
-        let apps = JSON.parse(localStorage.getItem('apps')) || [];
-
-        function renderApps() {
-            // Clear existing app links
-            sidebarNav.innerHTML = `
-                <button id="add-app-sidebar-button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
-                    Add App
-                </button>
-            `;
-            apps.forEach(app => {
-                const appLink = document.createElement('a');
-                appLink.href = "#";
-                appLink.className = "block py-2 px-4 rounded hover:bg-gray-700 mt-2";
-                appLink.textContent = app.name;
-                appLink.dataset.path = app.path;
-                appLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    displayStartButton(app.name, app.path);
-                });
-                sidebarNav.appendChild(appLink);
-            });
-            document.getElementById('add-app-sidebar-button').addEventListener('click', handleAddAppClick);
-        }
-
-        function handleAddAppClick() {
-            mainContent.innerHTML = `
-                <h1 class="text-3xl font-bold text-gray-800 mb-6">Add New Application</h1>
-                <div class="space-y-4">
-                    <div>
-                        <label for="appName" class="block text-sm font-medium text-gray-700">Application Name</label>
-                        <input type="text" id="appName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="e.g., My Game">
-                    </div>
-                    <div>
-                        <label for="appPath" class="block text-sm font-medium text-gray-700">Executable Path</label>
-                        <input type="text" id="appPath" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="e.g., C:\\Program Files\\MyGame\\game.exe">
-                    </div>
-                    <button id="submit-add-app" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                        Add Application
-                    </button>
-                </div>
-            `;
-            document.getElementById('submit-add-app').addEventListener('click', handleSubmitAddApp);
-        }
-
-        function handleSubmitAddApp() {
-            const appName = document.getElementById('appName').value;
-            const appPath = document.getElementById('appPath').value;
-
-            if (appName && appPath) {
-                apps.push({ name: appName, path: appPath });
-                localStorage.setItem('apps', JSON.stringify(apps));
-                renderApps();
-                mainContent.innerHTML = `
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
-                    <p class="text-gray-600">Application "${appName}" added successfully!</p>
-                `;
-            } else {
-                alert("Please enter both application name and executable path.");
-            }
-        }
-
-        function displayStartButton(appName, appPath) {
-            mainContent.innerHTML = `
-                <h1 class="text-3xl font-bold text-gray-800 mb-6">${appName}</h1>
-                <button id="start-exe-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    Start ${appName}
-                </button>
-            `;
-            document.getElementById('start-exe-button').addEventListener('click', () => {
-                // This will be handled by Electron's IPC in main.js
-                console.log(`Attempting to start ${appPath}`);
-                if (window.electron && window.electron.ipcRenderer) {
-                    console.log('window.electron.ipcRenderer is available.');
-                    window.electron.ipcRenderer.send('launch-exe', appPath);
-                } else {
-                    console.error('window.electron or window.electron.ipcRenderer is undefined.');
-                }
-            });
-        }
-
-        // Initial render
-        document.addEventListener('DOMContentLoaded', () => {
-            renderApps();
-            // Set initial main content
-            mainContent.innerHTML = `
-                <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Dashboard</h1>
-                <p class="text-gray-600">Select an app from the sidebar or click "Add App" to get started.</p>
-            `;
+        document.getElementById('stelliteButton').addEventListener('click', function() {
+            document.getElementById('contentFrame').src = 'https://stellite.onrender.com/';
         });
     </script>
 </body>
