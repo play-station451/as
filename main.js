@@ -51,6 +51,7 @@ function createWindow () {
   });
 
   mainWindow.loadFile('index.html');
+  mainWindow.maximize();
 }
 
 app.whenReady().then(() => {
