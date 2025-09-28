@@ -26,6 +26,18 @@ function createWindow () {
     });
   });
 
+  ipcMain.on('clear-site-data', (event) => {
+    mainWindow.webContents.session.clearStorageData({
+      storages: ['appcache', 'cookies', 'filesystem', 'indexdb', 'localstorage', 'shadercache', 'websql', 'serviceworkers'],
+    }).then(() => {
+      console.log('Site data cleared successfully.');
+      event.sender.send('site-data-cleared');
+    }).catch((error) => {
+      console.error('Failed to clear site data:', error);
+      event.sender.send('site-data-clear-failed', error.message);
+    });
+  });
+
   mainWindow.loadFile('index.html');
 }
 

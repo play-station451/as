@@ -46,6 +46,7 @@
         <button id="stelliteButton">Stellite</button>
         <input type="text" id="urlInput" placeholder="Enter URL here">
         <button id="goButton">Go</button>
+        <button id="clearDataButton">Clear Site Data</button>
     </div>
     <iframe id="contentFrame" src=""></iframe>
 
@@ -70,6 +71,12 @@
                 document.getElementById('contentFrame').src = currentProxy + fullUrl;
             } else if (urlInput && !currentProxy) {
                 alert('Please select a proxy (Xylara or Stellite) first.');
+            }
+        });
+
+        document.getElementById('clearDataButton').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear all site data for the current proxy? This will log you out of sites.')) {
+                window.electron.ipcRenderer.send('clear-site-data', currentProxy);
             }
         });
     </script>
