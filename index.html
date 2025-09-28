@@ -87,8 +87,9 @@
     <div class="buttons-container">
         <button id="xylaraButton">Xylara</button>
         <button id="stelliteButton">Stellite</button>
-        <button id="nebulaButton">Nebula</button>
-        <button id="womginxButton">Womginx</button>
+        <button id="holyButton">Holy</button>
+        <button id="terbiumButton">Terbium</button>
+        <button id="terbiumButton">Vapor</button>
         <button id="clearDataButton">Clear Site Data</button>
     </div>
     <iframe id="contentFrame" src=""></iframe>
@@ -106,13 +107,18 @@
             document.getElementById('contentFrame').src = currentProxy;
         });
 
-        document.getElementById('nebulaButton').addEventListener('click', function() {
-            currentProxy = 'https://nebulaservices.org/';
+        document.getElementById('holyButton').addEventListener('click', function() {
+            currentProxy = 'https://sleepsleepplease.org/';
             document.getElementById('contentFrame').src = currentProxy;
         });
 
-        document.getElementById('womginxButton').addEventListener('click', function() {
-            currentProxy = 'https://womginx.arph.org/';
+        document.getElementById('terbiumButton').addEventListener('click', function() {
+            currentProxy = 'https://terbiumon.top/';
+            document.getElementById('contentFrame').src = currentProxy;
+        });
+
+        document.getElementById('vaperButton').addEventListener('click', function() {
+            currentProxy = 'https://vapor.my/';
             document.getElementById('contentFrame').src = currentProxy;
         });
 
