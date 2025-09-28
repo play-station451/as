@@ -54,6 +54,7 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
+ app.commandLine.appendSwitch('ignore-certificate-errors');
   createWindow();
 
   app.on('activate', function () {
