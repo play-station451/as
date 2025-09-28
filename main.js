@@ -10,8 +10,8 @@ function createWindow () {
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false, // Disable nodeIntegration for security
-      contextIsolation: true // Enable contextIsolation and use preload script
+      nodeIntegration: false, 
+      contextIsolation: true 
     }
   });
 
@@ -36,6 +36,18 @@ function createWindow () {
       console.error('Failed to clear site data:', error);
       event.sender.send('site-data-clear-failed', error.message);
     });
+  });
+
+  ipcMain.on('close-window', () => {
+    mainWindow.close();
+  });
+
+  ipcMain.on('toggle-maximize-window', () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
   });
 
   mainWindow.loadFile('index.html');
