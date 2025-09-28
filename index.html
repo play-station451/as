@@ -16,12 +16,22 @@
         }
         .buttons-container {
             margin: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between elements */
         }
         button {
             padding: 10px 20px;
-            margin: 5px;
+            margin: 5px 0; /* Adjust margin for consistency */
             font-size: 16px;
             cursor: pointer;
+        }
+        #urlInput {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex-grow: 1; /* Allow input to take available space */
         }
         iframe {
             width: 100%;
@@ -34,16 +44,33 @@
     <div class="buttons-container">
         <button id="xylaraButton">Xylara</button>
         <button id="stelliteButton">Stellite</button>
+        <input type="text" id="urlInput" placeholder="Enter URL here">
+        <button id="goButton">Go</button>
     </div>
     <iframe id="contentFrame" src=""></iframe>
 
     <script>
+        let currentProxy = ''; // To keep track of the selected proxy
+
         document.getElementById('xylaraButton').addEventListener('click', function() {
-            document.getElementById('contentFrame').src = 'https://proxy-h3md.onrender.com/';
+            currentProxy = 'https://proxy-h3md.onrender.com/';
+            document.getElementById('contentFrame').src = currentProxy;
         });
 
         document.getElementById('stelliteButton').addEventListener('click', function() {
-            document.getElementById('contentFrame').src = 'https://stellite.onrender.com/';
+            currentProxy = 'https://stellite.onrender.com/';
+            document.getElementById('contentFrame').src = currentProxy;
+        });
+
+        document.getElementById('goButton').addEventListener('click', function() {
+            const urlInput = document.getElementById('urlInput').value;
+            if (urlInput && currentProxy) {
+                // Prepend 'https://' if not present
+                const fullUrl = urlInput.startsWith('http://') || urlInput.startsWith('https://') ? urlInput : 'https://' + urlInput;
+                document.getElementById('contentFrame').src = currentProxy + fullUrl;
+            } else if (urlInput && !currentProxy) {
+                alert('Please select a proxy (Xylara or Stellite) first.');
+            }
         });
     </script>
 </body>
